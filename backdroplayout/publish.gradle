@@ -1,0 +1,82 @@
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
+
+version '1.0.0'
+group 'com.upco.components'
+
+def siteUrl = 'https://github.com/UpCO/BackdropLayout'
+def gitUrl  = 'https://github.com/UpCO/BackdropLayout.git'
+
+def pomConfig = {
+    name 'com.upco.components:backdroplayout'
+    description = "Implementation of BackdropLayout with up to two Backdrops (one "
+                  "triggered from left toolbar icon, the other from right toolbar icon)."
+    url siteUrl
+
+    licenses {
+        license {
+            name 'MIT'
+            url 'https://opensource.org/licenses/MIT'
+        }
+    }
+
+    developers {
+        developer {
+            id 'mrchampz'
+            name 'Felipe V.'
+            email 'felps.mac@outlook.com'
+        }
+    }
+
+    scm {
+        connection gitUrl
+        developerConnection gitUrl
+        url siteUrl
+    }
+}
+
+publishing {
+    publications {
+        DefaultPublication(MavenPublication) {
+            groupId this.group
+            artifactId 'backdrop'
+            version this.version
+
+            pom.withXml {
+                def root = asNode()
+                root.children().last() + pomConfig
+
+                def dependenciesNode = root.getAt('dependencies')[0] ?: root.appendNode('dependencies')
+                configurations.implementation.allDependencies.each {
+                    if (it.name != 'unspecified') {
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', it.group)
+                        dependencyNode.appendNode('artifactId', it.name)
+                        dependencyNode.appendNode('version', it.version)
+                    }
+                }
+            }
+        }
+    }
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newInputStream())
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+    publications = ['DefaultPublication']
+    configurations  = ['archives']
+    pkg {
+        repo        = "maven"
+        name        = "com.upco.components:backdroplayout"
+        description = "Implementation of BackdropLayout with up to two Backdrops (one "
+                      "triggered from left toolbar icon, the other from right toolbar icon)."
+        userOrg     = "upco"
+        websiteUrl  = siteUrl
+        vcsUrl      = gitUrl
+        licenses    = ['MIT']
+        publish     = true
+    }
+}

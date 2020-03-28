@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/backdrop_organizations_filters"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingStart="15dp"
+    android:paddingLeft="15dp"
+    android:paddingEnd="15dp"
+    android:paddingRight="15dp"
+    android:paddingTop="88dp"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bt1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Featured" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bt2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Apartment" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bt3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Shoes" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bt4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tops" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bt5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bottoms" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bt6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dresses" />
+
+    <View
+        android:layout_width="56dp"
+        android:layout_height="1dp"
+        android:layout_margin="16dp"
+        android:background="@android:color/white" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bt7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="My Account" />
+
+</LinearLayout>

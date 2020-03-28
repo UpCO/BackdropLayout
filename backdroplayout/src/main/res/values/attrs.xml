@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BackdropLayout">
+        <attr name="toolbar" format="reference" />
+        <attr name="sheet" format="reference" />
+        <attr name="bd1_openTitle" format="string" />
+        <attr name="bd1_closeTitle" format="string" />
+        <attr name="bd1_openIcon" format="reference" />
+        <attr name="bd1_closeIcon" format="reference" />
+        <attr name="bd1_revealHeight" format="dimension" />
+        <attr name="bd1_backdrop" format="reference" />
+        <attr name="bd2_openTitle" format="string" />
+        <attr name="bd2_closeTitle" format="string" />
+        <attr name="bd2_openIcon" format="reference" />
+        <attr name="bd2_closeIcon" format="reference" />
+        <attr name="bd2_revealHeight" format="dimension" />
+        <attr name="bd2_backdrop" format="reference" />
+    </declare-styleable>
+</resources>

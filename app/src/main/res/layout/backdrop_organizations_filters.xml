@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/backdrop_main_menu"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="88dp"
+    android:paddingStart="15dp"
+    android:paddingLeft="15dp"
+    android:paddingEnd="15dp"
+    android:paddingRight="15dp"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tx1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Organização"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/bt2"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="start"
+        android:textAlignment="textStart"
+        android:textAllCaps="false"
+        android:textColor="#878787"
+        android:textSize="14sp"
+        android:text="País de origem"
+        style="?attr/materialButtonOutlinedStyle" />
+
+    <Button
+        android:id="@+id/bt3"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="start"
+        android:textAlignment="textStart"
+        android:textAllCaps="false"
+        android:textColor="#878787"
+        android:textSize="14sp"
+        android:text="Países em que atua"
+        style="?attr/materialButtonOutlinedStyle" />
+
+</LinearLayout>
