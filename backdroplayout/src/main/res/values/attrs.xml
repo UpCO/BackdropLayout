@@ -3,6 +3,8 @@
     <declare-styleable name="BackdropLayout">
         <attr name="toolbar" format="reference" />
         <attr name="sheet" format="reference" />
+        <attr name="subheader" format="reference" />
+        <attr name="backgroundColor" format="color" />
         <attr name="bd1_openTitle" format="string" />
         <attr name="bd1_closeTitle" format="string" />
         <attr name="bd1_openIcon" format="reference" />

@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:sheet="@layout/backdrop_sheet_main_organizations"
+        app:subheader="@layout/backdrop_sheet_header"
         app:bd1_openTitle="Menu"
         app:bd1_closeTitle="@string/app_name"
         app:bd1_openIcon="@drawable/ic_close_to_menu_24dp"

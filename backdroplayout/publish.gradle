@@ -1,37 +1,40 @@
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
-version '1.0.0'
+version '1.0.1'
 group 'com.upco.components'
+def artifact = 'backdroplayout'
 
 def siteUrl = 'https://github.com/UpCO/BackdropLayout'
 def gitUrl  = 'https://github.com/UpCO/BackdropLayout.git'
 
 def pomConfig = {
-    name 'com.upco.components:backdroplayout'
-    description = "Implementation of BackdropLayout with up to two Backdrops (one "
+    packaging = 'aar'
+
+    name = 'BackdropLayout'
+    description = "Implementation of BackdropLayout with up to two Backdrops (one " +
                   "triggered from left toolbar icon, the other from right toolbar icon)."
-    url siteUrl
+    url = siteUrl
 
     licenses {
         license {
-            name 'MIT'
-            url 'https://opensource.org/licenses/MIT'
+            name = 'MIT'
+            url = 'https://opensource.org/licenses/MIT'
         }
     }
 
     developers {
         developer {
-            id 'mrchampz'
-            name 'Felipe V.'
-            email 'felps.mac@outlook.com'
+            id = 'mrchampz'
+            name = 'Felipe V.'
+            email = 'felps.mac@outlook.com'
         }
     }
 
     scm {
-        connection gitUrl
-        developerConnection gitUrl
-        url siteUrl
+        connection = gitUrl
+        developerConnection = gitUrl
+        url = siteUrl
     }
 }
 
@@ -39,14 +42,11 @@ publishing {
     publications {
         DefaultPublication(MavenPublication) {
             groupId this.group
-            artifactId 'backdrop'
+            artifactId artifact
             version this.version
-
+            pom pomConfig
             pom.withXml {
-                def root = asNode()
-                root.children().last() + pomConfig
-
-                def dependenciesNode = root.getAt('dependencies')[0] ?: root.appendNode('dependencies')
+                def dependenciesNode = asNode().appendNode('dependencies')
                 configurations.implementation.allDependencies.each {
                     if (it.name != 'unspecified') {
                         def dependencyNode = dependenciesNode.appendNode('dependency')
@@ -70,8 +70,8 @@ bintray {
     configurations  = ['archives']
     pkg {
         repo        = "maven"
-        name        = "com.upco.components:backdroplayout"
-        description = "Implementation of BackdropLayout with up to two Backdrops (one "
+        name        = "BackdropLayout"
+        description = "Implementation of BackdropLayout with up to two Backdrops (one " +
                       "triggered from left toolbar icon, the other from right toolbar icon)."
         userOrg     = "upco"
         websiteUrl  = siteUrl

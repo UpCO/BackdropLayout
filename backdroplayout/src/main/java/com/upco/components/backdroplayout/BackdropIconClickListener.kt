@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Handler
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.Interpolator
@@ -16,20 +17,24 @@ import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.upco.components.R
+import com.upco.util.DimensionUtils
 
 class BackdropIconClickListener @JvmOverloads internal constructor(
     private val context: Context,
     private val toolbar: Toolbar,
     private val sheet: View,
     private val backdrop: View,
-    private val revealHeight: Int = 0,
+    private val revealHeight: Float = 0.0f,
     private val openTitle: String = "",
     private val closeTitle: String = "",
     private val openIcon: Drawable? = null,
     private val closeIcon: Drawable? = null,
     private val interpolator: Interpolator? = null,
-    private val updateHiddenIcon: (Boolean) -> Unit
+    private val isBackdropShown: (Boolean) -> Unit
 ) : View.OnClickListener, MenuItem.OnMenuItemClickListener {
+
+    private var selectedToolbarIcon: View? = null
+    private var selectedMenuItem: MenuItem? = null
 
     private val animatorSet = AnimatorSet()
     private val animDuration = 500L
@@ -37,9 +42,20 @@ class BackdropIconClickListener @JvmOverloads internal constructor(
     private var backdropShown = false
 
     init {
+        // Get toolbar height, so we can subtract from total height
+        val styledAttrs = context.obtainStyledAttributes(IntArray(1) { R.attr.actionBarSize })
+        val toolbarHeight = styledAttrs.getDimensionPixelSize(
+            0,
+            DimensionUtils.convertDpToPxInt(context.resources, 56.0f)
+        )
+        styledAttrs.recycle()
+
+        // Get screen height
         val displayMetrics = DisplayMetrics()
         (context as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)
-        height = displayMetrics.heightPixels
+
+        // Subtract toolbar height from total height
+        height = displayMetrics.heightPixels - toolbarHeight
     }
 
     override fun onClick(view: View) {
@@ -51,44 +67,49 @@ class BackdropIconClickListener @JvmOverloads internal constructor(
         return true
     }
 
-    private fun toggleBackdrop(view: View) {
-        backdropShown = !backdropShown
+    fun open() {
+        backdropShown = true
 
         cancelAnimations()
-        updateIcon(view)
-        updateTitle()
-        updateHiddenIcon(backdropShown)
 
-        if (!backdropShown) {
-            // Translate first, then change visibility
-            translateSheet()
-            Handler().postDelayed({
-                toggleBackdropVisibility()
-            }, animDuration)
-        } else {
+        selectedToolbarIcon?.apply { updateIcon(this) }
+        selectedMenuItem?.apply { updateIcon(this) }
+
+        updateTitle()
+        isBackdropShown(backdropShown)
+
+        toggleBackdropVisibility()
+        translateSheet()
+    }
+
+    fun close() {
+        backdropShown = false
+
+        cancelAnimations()
+
+        selectedToolbarIcon?.apply { updateIcon(this) }
+        selectedMenuItem?.apply { updateIcon(this) }
+
+        updateTitle()
+        isBackdropShown(backdropShown)
+
+        // Translate first, then change visibility
+        translateSheet()
+        Handler().postDelayed({
             toggleBackdropVisibility()
-            translateSheet()
-        }
+        }, animDuration)
+    }
+
+    private fun toggleBackdrop(view: View) {
+        selectedToolbarIcon = view
+        if (backdropShown) close()
+        else open()
     }
 
     private fun toggleBackdrop(menuItem: MenuItem) {
-        backdropShown = !backdropShown
-
-        cancelAnimations()
-        updateIcon(menuItem)
-        updateTitle()
-        updateHiddenIcon(backdropShown)
-
-        if (!backdropShown) {
-            // Translate first, then change visibility
-            translateSheet()
-            Handler().postDelayed({
-                toggleBackdropVisibility()
-            }, 500)
-        } else {
-            toggleBackdropVisibility()
-            translateSheet()
-        }
+        selectedMenuItem = menuItem
+        if (backdropShown) close()
+        else open()
     }
 
     private fun cancelAnimations() {
@@ -157,19 +178,21 @@ class BackdropIconClickListener @JvmOverloads internal constructor(
     }
 
     private fun translateSheet() {
-        val revealMinHeight
-                = context.resources.getDimensionPixelSize(R.dimen.backdrop_reveal_min_height)
+        val sheetMinVisibleHeight
+                = context.resources.getDimension(R.dimen.backdrop_sheet_min_visible_height)
 
-        val translateY = if (revealHeight < revealMinHeight) {
-            height - revealMinHeight
+        val availableHeight = height - sheetMinVisibleHeight;
+
+        val translateY = if (revealHeight > availableHeight) {
+            availableHeight
         } else {
-            height - revealHeight
+            revealHeight
         }
 
         val animator = ObjectAnimator.ofFloat(
             sheet,
             "translationY",
-            (if (backdropShown) translateY else 0).toFloat()
+            if (backdropShown) translateY else 0.0f
         )
         animator.duration = animDuration
         if (interpolator != null) {
